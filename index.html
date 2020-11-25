@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+  <head>
+  	<title>Tiendas Sagasti</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,800,900" rel="stylesheet">
+		<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/misestilos.css">
+
+  </head>
+  <body>
+
+    <nav class="navbar navbar-dark bg-dark">
+      <a class="navbar-brand">Tiendas Sagasti</a>
+      <form class="form-inline">
+        
+        <input class="form-control mr-sm-2" type="search" placeholder="Buscar productos..." aria-label="Search">
+        <button class="btn btn-outline-info my-2 my-sm-0" type="submit">Buscar</button>
+
+        <button type="button" class="btn btn-outline-info" data-toggle="dropdown">
+          <i class="fa fa-shopping-cart" aria-hidden="true"></i> Cart <span class="badge badge-pill badge-danger"><div id="contador"></div></span>
+         </button>
+      </form>
+    </nav>
+		
+		<div class="container d-md-flex align-items-stretch">
+      <!-- Page Content  -->
+      <div id="content" class="p-4 p-md-5 pt-5">
+        <div class="col">
+          <h2 id="Cabecera">Nuestros Productos</h2>
+        </div>
+        
+        <hr>
+        <div id="contenedorProductos" class="container bcontent">
+          
+      </div>
+      </div>
+
+      <nav id="sidebar">
+				<div class="p-4 pt-5">
+          
+          <div class="row">
+            <div class="col">
+              <h5>Categorias</h5>
+            </div>
+              
+              <button id="CerrarCategorias" class="btn btn-danger"><i class="fa fa-times" aria-hidden="true"></i></button>
+            
+          </div>
+	        <ul id="contenedorCategorias" class="list-unstyled components mb-5">
+	          
+	        </ul>
+					<div class="mb-5">
+						<h5>Ordenar por:</h5>
+            <div class="tagcloud">
+                    <input type="radio" id="precio" name="orden" value="precio">
+                    <label style="color: black;" for="">Precio</label> <br>
+                    <input type="radio" id="titulo" name="orden" value="titulo">
+                    <label style="color: black;" for="">Titulo</label> <br>
+                    <input type="radio" id="relevancia" name="orden" value="relevancia">
+                    <label style="color: black;" for="">Relevancia</label> <br>
+            </div>
+					</div>
+
+	      </div>
+    	</nav>
+		</div>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="js/popper.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/main.js"></script>
+    <script src="index.js"></script>
+  </body>
+</html>
