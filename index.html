@@ -18,13 +18,16 @@
     <nav class="navbar navbar-dark bg-dark">
       <a class="navbar-brand">Tiendas Sagasti</a>
       <form class="form-inline">
-        
-        <input class="form-control mr-sm-2" type="search" placeholder="Buscar productos..." aria-label="Search">
-        <button class="btn btn-outline-info my-2 my-sm-0" type="submit">Buscar</button>
 
-        <button type="button" class="btn btn-outline-info" data-toggle="dropdown">
-          <i class="fa fa-shopping-cart" aria-hidden="true"></i> Cart <span class="badge badge-pill badge-danger"><div id="contador"></div></span>
+        <button style="margin-right:10px;" type="button" class="btn btn-outline-info" data-toggle="dropdown">
+          <i class="fa fa-shopping-cart" aria-hidden="true"></i> Carrito <span class="badge badge-pill badge-danger"><div id="contador"></div></span>
          </button>
+
+        
+        <input id="cajabuscar" class="form-control mr-sm-2" type="search" placeholder="Buscar productos..." aria-label="Search">
+        <button class="btn btn-outline-info my-2 my-sm-0" onclick="buscando()" type="submit">Buscar</button>
+
+        
       </form>
     </nav>
 		
@@ -44,6 +47,21 @@
       <nav id="sidebar">
 				<div class="p-4 pt-5">
           
+          
+					<div class="mb-5">
+						<h5>Ordenar por:</h5>
+            <div class="tagcloud">
+                    <input type="radio" id="precio" name="orden" value="precio">
+                    <label style="color: black;" for="precio">Precio</label> <br>
+                    <input type="radio" id="titulo" name="orden" value="titulo">
+                    <label style="color: black;" for="titulo">Titulo</label> <br>
+                    <input type="radio" id="relevancia" name="orden" value="relevancia">
+                    <label style="color: black;" for="relevancia">Relevancia</label> <br>
+                    <input type="radio" id="vendidos" name="orden" value="vendidos">
+                    <label style="color: black;" for="vendidos">Vendidos</label> <br>
+            </div>
+          </div>
+          
           <div class="row">
             <div class="col">
               <h5>Categorias</h5>
@@ -55,17 +73,6 @@
 	        <ul id="contenedorCategorias" class="list-unstyled components mb-5">
 	          
 	        </ul>
-					<div class="mb-5">
-						<h5>Ordenar por:</h5>
-            <div class="tagcloud">
-                    <input type="radio" id="precio" name="orden" value="precio">
-                    <label style="color: black;" for="">Precio</label> <br>
-                    <input type="radio" id="titulo" name="orden" value="titulo">
-                    <label style="color: black;" for="">Titulo</label> <br>
-                    <input type="radio" id="relevancia" name="orden" value="relevancia">
-                    <label style="color: black;" for="">Relevancia</label> <br>
-            </div>
-					</div>
 
 	      </div>
     	</nav>

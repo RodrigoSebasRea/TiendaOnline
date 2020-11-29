@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+  <head>
+  	<title>Tiendas Sagasti</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,800,900" rel="stylesheet">
+	<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/misestilos2.css">
+
+  </head>
+  <body>
+
+    <nav class="navbar navbar-dark bg-dark">
+      <a class="navbar-brand">Tiendas Sagasti</a>
+      <form class="form-inline">
+
+        <button style="margin-right:10px;" type="button" class="btn btn-outline-info" data-toggle="dropdown">
+          <i class="fa fa-shopping-cart" aria-hidden="true"></i> Carrito <span class="badge badge-pill badge-danger"><div id="contador"></div></span>
+         </button>
+
+        
+        <input id="cajabuscar" class="form-control mr-sm-2" type="search" placeholder="Buscar productos..." aria-label="Search">
+        <button class="btn btn-outline-info my-2 my-sm-0" onclick="buscando()" type="submit">Buscar</button>
+
+        
+      </form>
+    </nav>
+
+    <div class="container mt-5">
+        <div class="card shopping-cart">
+                 
+                 <div id="contenedorCarrito" class="card-body">
+
+                     
+                </div>
+                
+                 <div class="card-footer">
+                     <div class="coupon col-md-5 col-sm-5 no-padding-left pull-left">
+                         <div class="row">
+                             <div class="col-6">
+                                 <input type="text" class="form-control" placeholder="cupone code">
+                             </div>
+                             <div class="col-6">
+                                 <input type="submit" class="btn btn-default" value="Use cupone">
+                             </div>
+                         </div>
+                     </div>
+                     <div class="pull-right" style="margin: 10px">
+                         <a href="" class="btn btn-success pull-right">Comprar</a>
+                         <div id="total" class="pull-right" style="margin: 5px">
+                             
+                         </div>
+                     </div>
+                 </div>
+             </div>
+     </div>
+		
+		
+
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="js/popper.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="carrito.js"></script>
+  </body>
+</html>

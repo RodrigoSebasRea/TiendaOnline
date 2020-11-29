@@ -1,114 +1,96 @@
 const listaProductos = [];
 const listaCarritos = [];
+const productoscarritoId = [];
+
+var listaOrden;
 
 var cont = JSON.parse(localStorage.getItem("contador")) || "0";
 $("#contador").text(cont);
-/*
-if(cont !=null){
-    $("#contador").text(localStorage.getItem("contador"));
-}else{
-    $("#contador").text("0");
-}
-*/
-//cont !=null ? $("#contador").text(localStorage.getItem("contador")) : $("#contador").text("0");
-
-renderizarProductos(listaProductos);
-renderizarCategorias();
 
 
 $("#CerrarCategorias").on('click',function(){
     renderizarProductos(listaProductos);
     randerizarCarrito()
+    listaOrden = listaProductos;
     $("#Cabecera").text("Nuestros Productos");
     $("#CerrarCategorias").hide();
 
 })
 
+$( "input" ).on( "click", function() {
+    let valor = $( "input:checked" ).val()
+    Ordenar(valor,listaOrden);
+});
+
+function filterItems(texto,lista) {
+    return lista.filter(function(productos) {
+        return productos.nombre.toLowerCase().indexOf(texto.toLowerCase()) > -1;
+    })
+  }
+
+
+function buscando(){
+    var texto = $("#cajabuscar").val();
+    var listaBusqueda = filterItems(texto,listaOrden);
+    renderizarProductos(listaBusqueda);
+}
+
 
 function enviar(idproducto){
-    const idprodunicos = [];
 
-    $.get("http://localhost:3000/carrito", (r)=>{
-        
-        r.forEach((carr)=>{
-            idprodunicos.push(carr.id);
-            //$(`#quitar${carr.id}`).show();
+    if (productoscarritoId.includes(idproducto)) {
+        alert("Ya esta registrado este id")
+    }else{
+        var {id,nombre,descripcion,precio,imagen} = listaProductos.find( valor =>valor.id == idproducto) ;
+        var data = {id,nombre,descripcion,precio,imagen};
+
+        $.ajax({
+                url : 'http://localhost:3000/carrito',
+                data : data, 
+                method : 'post',
+                dataType : 'json',
+                success : function(response){
+                    alert("Registrado")
+
+                    $( `#nose${response.id}` ).prop( "disabled", false ); 
+
+                    productoscarritoId.push(idproducto);
+
+                    cont++;
+                    localStorage.setItem("contador", JSON.stringify(cont));
+                    $("#contador").text(cont);
+                },
+                error: function(error){
+                    console.log(error);
+                }
         });
-
-        console.log(idprodunicos);
-
-        if(idprodunicos.includes(idproducto)){
-            alert("Ya registro este producto");
-            
-
-        }else{
-            //Mensaje
-            alert("Producto Agregado");
-
-             //Para el contador
-            cont++;
-            localStorage.setItem("contador", JSON.stringify(cont));
-            $("#contador").text(cont);
-            
-             //Se buscan y guardan los datos a enviar
-            /*var prod = listaProductos.find( valor =>valor.id == idproducto) ;
-            var data = { id:prod.id,nombre:prod.nombre, descripcion:prod.descripcion, precio:prod.precio, imagen:prod.imagen};*/
-
-            var {id,nombre,descripcion,precio,imagen} = listaProductos.find( valor =>valor.id == idproducto) ;
-            var data = {id,nombre,descripcion,precio,imagen};
-
-            //Se envia a carrito la informacion
-            $.ajax({
-                    url : 'http://localhost:3000/carrito',
-                    data : data, 
-                    method : 'post',
-                    dataType : 'json',
-                    success : function(response){
-                        console.log(response);
-                        $( `#nose${response.id}` ).prop( "disabled", false ); 
-                    },
-                    error: function(error){
-                        //console.log(error);
-                    }
-            });
-
-            //Randerizamos la lista
-            //renderizarProductos(listaProductos);
-            //randerizarCarrito()
-
-
-        }
-    }) 
-
-    console.log(idprodunicos);
+    }
 }
 
 function Quitar(id){
+    if(cont>0){
+        $.ajax({ url: `http://localhost:3000/carrito/${id}`, method: "DELETE" })
+        .then(function (data) {
 
-    if(cont==0){
-        //$(`#quitar${idproducto}`).hide();
-    }else{
-    cont--;
-    localStorage.setItem("contador", JSON.stringify(cont));
-    $("#contador").text(cont);
-
-
-    $.ajax({ url: `http://localhost:3000/carrito/${id}`, method: "DELETE" })
-            .then(function (data) {
-                console.log(id);
-                $( `#nose${id}` ).prop( "disabled", true ); 
-            })
-            .catch(function (err) {
-                console.log(err);
-            });
+            $( `#nose${id}` ).prop( "disabled", true ); 
+            
+            var index = productoscarritoId.indexOf(id);
+            if (index > -1) {
+                productoscarritoId.splice(index, 1);
+            }
+            
+            cont--;
+            localStorage.setItem("contador", JSON.stringify(cont));
+            $("#contador").text(cont);
+        })
+        .catch(function (err) {
+            console.log(err);
+        });
     }
-    //renderizarProductos(listaProductos);
-    //randerizarCarrito()
 }
 
-function BotonQuitar(lista){
+function HabilitarQuitar(lista){
     for (let index = 0; index < lista.length; index++) {
-        //console.log(lista[index].id)
         $( `#nose${lista[index].id}` ).prop( "disabled", false ); 
     }
 }
@@ -150,7 +132,7 @@ function renderizarProductos(lista){
                           <div  class="row col-md-12">
                           
 
-                          <button id="registrar" onclick="enviar('${producto.id}')" class="btn btn-outline-primary">Registrar</button>
+                          <button style="margin-right:5px;" id="registrar" onclick="enviar('${producto.id}')" class="btn btn-outline-primary col-md-4">Registrar</button>
                           <button id="nose${producto.id}" onclick="Quitar('${producto.id}')" class="btn btn-outline-primary">Quitar</button>
 
                           </div>
@@ -165,8 +147,8 @@ function renderizarProductos(lista){
     let contenedorDeProductos = document.getElementById('contenedorProductos');
     contenedorDeProductos.innerHTML = htmlCards;
     valoracionEstrellas();
+    randerizarCarrito()
     
-   
 }
 
 function valoracionEstrellas(){
@@ -194,11 +176,43 @@ function valoracionEstrellas(){
 
         $( `.stars-inner.${producto.id}` ).css( "width", porcentaje(producto.valoracion) );
         $( `#nose${producto.id}` ).prop( "disabled", true );
- 
-        //$(`#nose${producto.id}`).hide();
-        
-
     })
+}
+
+function Ordenar(valor,lista){
+    switch(valor){
+        case 'precio' : 
+        listaPrecio =  lista.sort(function(a,b){
+            return a.precio - b.precio;
+        });
+
+        renderizarProductos(listaPrecio);
+        break;
+
+        case 'titulo' : 
+        listaTitulo =  lista.sort(function(a,b){
+            return a.nombre.toLowerCase().localeCompare(b.nombre.toLowerCase());
+        });
+
+        renderizarProductos(listaTitulo);
+        break;
+
+        case 'relevancia' : 
+        listaRelevancia =  lista.sort(function(a,b){
+            return b.valoracion - a.valoracion;
+        });
+
+        renderizarProductos(listaRelevancia);
+        break;
+
+        case 'vendidos' : 
+        listaVendidos =  lista.sort(function(a,b){
+            return b.cantidad - a.cantidad;
+        });
+
+        renderizarProductos(listaVendidos);
+        break;
+    }    
 }
 
 function renderizarCategorias(){
@@ -210,7 +224,6 @@ function renderizarCategorias(){
     })
 
     let categoriasUnicas = Array.from(new Set(categoriasRepetidas))
-
 
     categoriasUnicas.forEach((valor)=>{
 
@@ -224,58 +237,51 @@ function renderizarCategorias(){
 
     let contenedorCategorias = document.getElementById('contenedorCategorias');
     contenedorCategorias.innerHTML = htmlCategorias;
-    $("#CerrarCategorias").hide();
-    
-    
+    $("#CerrarCategorias").hide(); 
 }
-
-
 
 function buscarPorCategoria(categoriaR){
     let productosCategoria = listaProductos.filter(cat => cat.categoria == categoriaR);
+    listaOrden = productosCategoria;
     renderizarProductos(productosCategoria);
     $("#Cabecera").text(productosCategoria[0].categoria);
     $("#CerrarCategorias").show();
 }
 
 
-var xmlhttp = new XMLHttpRequest();
-
-xmlhttp.onreadystatechange = ()=>{
-    if(xmlhttp.readyState == XMLHttpRequest.DONE){
-        if(xmlhttp.status == 200){
-            const responseRaw = xmlhttp.responseText;
-            const response = JSON.parse(responseRaw);
-            //const idProductos = response.id;
-            //console.log(response[].id);
-
-            for(var i=0;i<response.length;i++){
+function randerizarProductoX(){
+    $.ajax({
+        url:'http://localhost:3000/productos',
+        type:'get',
+        dataType:'json',
+        success: function(e){
+            const response = e;
+            for (let i = 0; i < e.length; i++) {
                 listaProductos.push({
-                id: response[i].id,
-                nombre: response[i].nombre,
-                descripcion: response[i].descripcion,
-                categoria: response[i].categoria,
-                precio: response[i].precio,
-                valoracion: response[i].valoracion,
-                cantidad: response[i].cantidad,
-                imagen: response[i].imagen
-                })
+                    id: response[i].id,
+                    nombre: response[i].nombre,
+                    descripcion: response[i].descripcion,
+                    categoria: response[i].categoria,
+                    precio: response[i].precio,
+                    valoracion: response[i].valoracion,
+                    cantidad: response[i].cantidad,
+                    imagen: response[i].imagen
+                    })
             }
-
-            renderizarProductos(listaProductos);
             
-
+            renderizarProductos(listaProductos);
             renderizarCategorias();
-        } else if(xmlhttp.status == 404){
-            alert("Ruta no encontrada");
+            listaOrden = listaProductos;
+    
+        },
+        error : function(r){
+            console.log(r)
         }
-    }
+    });
 }
+randerizarProductoX()
 
-xmlhttp.open("GET","http://localhost:3000/productos",true);
-xmlhttp.send();
 
-randerizarCarrito()
 
 function randerizarCarrito(){
     $.ajax({
@@ -293,8 +299,7 @@ function randerizarCarrito(){
                     imagen: response[i].imagen
                 });
             }
-            
-            BotonQuitar(listaCarritos);
+            HabilitarQuitar(listaCarritos);
     
         },
         error : function(r){
@@ -302,12 +307,13 @@ function randerizarCarrito(){
         }
     });
 }
+randerizarCarrito()
 
 
 
 
 
 
-//console.log(listaCarritos[0])
-//console.log(listaProductos[0])
+
+
 
